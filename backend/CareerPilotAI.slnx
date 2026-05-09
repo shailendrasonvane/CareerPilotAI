@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/CareerPilot.API/CareerPilot.API.csproj" />
+    <Project Path="src/CareerPilot.Application/CareerPilot.Application.csproj" />
+    <Project Path="src/CareerPilot.Domain/CareerPilot.Domain.csproj" />
+    <Project Path="src/CareerPilot.Infrastructure/CareerPilot.Infrastructure.csproj" />
+    <Project Path="src/CareerPilot.Persistence/CareerPilot.Persistence.csproj" />
+    <Project Path="src/CareerPilot.Shared/CareerPilot.Shared.csproj" />
+  </Folder>
+</Solution>

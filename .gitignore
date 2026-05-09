@@ -1,0 +1,13 @@
+# Backend
+bin/
+obj/
+
+# Frontend
+node_modules/
+dist/
+
+# Environment
+.env
+
+# VS
+.vs/
