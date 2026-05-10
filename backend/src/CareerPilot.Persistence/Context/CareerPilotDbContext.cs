@@ -10,7 +10,6 @@ public class CareerPilotDbContext : DbContext
     }
 
     public DbSet<User> Users { get; set; }
-    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -19,10 +18,5 @@ public class CareerPilotDbContext : DbContext
         modelBuilder.Entity<User>()
             .HasIndex(u => u.Email)
             .IsUnique();
-
-        modelBuilder.Entity<RefreshToken>()
-            .HasOne(r => r.User)
-            .WithMany(u => u.RefreshTokens)
-            .HasForeignKey(r => r.UserId);
     }
 }

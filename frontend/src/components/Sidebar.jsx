@@ -7,7 +7,8 @@ import {
   UserCircle, 
   Settings, 
   BarChart3,
-  HelpCircle
+  HelpCircle,
+  Lock
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -17,6 +18,7 @@ const Sidebar = () => {
     { icon: Briefcase, label: 'Job Tracker', path: '/jobs' },
     { icon: BarChart3, label: 'Analytics', path: '/analytics' },
     { icon: UserCircle, label: 'Profile', path: '/profile' },
+    { icon: Lock, label: 'Change Password', path: '/change-password' },
     { icon: Settings, label: 'Settings', path: '/settings' },
   ];
 

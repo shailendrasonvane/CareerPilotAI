@@ -4,6 +4,12 @@ import PublicLayout from './layouts/PublicLayout';
 import DashboardLayout from './layouts/DashboardLayout';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
+import VerifyEmailPage from './pages/VerifyEmailPage';
+import ProfilePage from './pages/ProfilePage';
+import ChangePasswordPage from './pages/ChangePasswordPage';
+import AdminRoute from './components/AdminRoute';
 
 // Placeholder pages
 const HomePage = () => (
@@ -85,6 +91,13 @@ const DashboardHome = () => (
   </div>
 );
 
+const AdminDashboard = () => (
+  <div className="p-8">
+    <h1 className="text-3xl font-bold text-slate-900">Admin Dashboard</h1>
+    <p className="mt-4 text-slate-600">Welcome to the Admin control panel.</p>
+  </div>
+);
+
 const App = () => {
   return (
     <Routes>
@@ -93,6 +106,9 @@ const App = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route path="/verify-email" element={<VerifyEmailPage />} />
       </Route>
 
       {/* Protected Routes */}
@@ -100,8 +116,13 @@ const App = () => {
         <Route path="/dashboard" element={<DashboardHome />} />
         <Route path="/resumes" element={<div className="p-8">My Resumes Page</div>} />
         <Route path="/jobs" element={<div className="p-8">Job Tracker Page</div>} />
-        <Route path="/profile" element={<div className="p-8">Profile Page</div>} />
-        <Route path="/settings" element={<div className="p-8">Settings Page</div>} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/change-password" element={<ChangePasswordPage />} />
+        
+        {/* Admin Routes */}
+        <Route element={<AdminRoute />}>
+          <Route path="/admin" element={<AdminDashboard />} />
+        </Route>
       </Route>
 
       {/* Fallback */}

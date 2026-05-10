@@ -96,6 +96,25 @@ using (var scope = app.Services.CreateScope())
     {
         var context = services.GetRequiredService<CareerPilotDbContext>();
         context.Database.Migrate();
+
+        if (!context.Users.Any(u => u.Email == "admin@careerpilot.com"))
+        {
+            var hasher = new Microsoft.AspNetCore.Identity.PasswordHasher<CareerPilot.Domain.Entities.User>();
+            var adminUser = new CareerPilot.Domain.Entities.User
+            {
+                FirstName = "Admin",
+                LastName = "User",
+                Email = "admin@careerpilot.com",
+                Role = "Admin",
+                IsActive = true,
+                IsEmailVerified = true,
+                CreatedDate = DateTime.UtcNow
+            };
+            adminUser.PasswordHash = hasher.HashPassword(adminUser, "Admin@123");
+            
+            context.Users.Add(adminUser);
+            context.SaveChanges();
+        }
     }
     catch (Exception ex)
     {

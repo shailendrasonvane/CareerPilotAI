@@ -9,4 +9,8 @@ public interface IAuthService
     Task<Result<AuthResponse>> RegisterAsync(RegisterRequest request);
     Task<Result<AuthResponse>> RefreshTokenAsync(string token, string refreshToken);
     Task<Result> RevokeTokenAsync(string refreshToken);
+    Task<Result> ForgotPasswordAsync(ForgotPasswordRequest request);
+    Task<Result> ResetPasswordAsync(ResetPasswordRequest request);
+    Task<Result> VerifyEmailAsync(VerifyEmailRequest request);
+    Task<Result> ResendVerificationEmailAsync(ResendVerificationEmailRequest request);
 }

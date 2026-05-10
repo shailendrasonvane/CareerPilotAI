@@ -12,6 +12,7 @@ public static class DependencyInjection
     {
         services.AddAutoMapper(cfg => cfg.AddMaps(typeof(MappingProfile).Assembly));
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IUserService, UserService>();
         // services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         
         return services;

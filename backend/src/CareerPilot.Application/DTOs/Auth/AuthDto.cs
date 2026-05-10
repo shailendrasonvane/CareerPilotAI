@@ -29,4 +29,30 @@ public class UserDto
     public string Email { get; set; } = string.Empty;
     public string Role { get; set; } = string.Empty;
     public string? ProfileImageUrl { get; set; }
+    public string? PhoneNumber { get; set; }
+    public bool IsEmailVerified { get; set; }
 }
+
+public class ForgotPasswordRequest
+{
+    public string Email { get; set; } = string.Empty;
+}
+
+public class ResetPasswordRequest
+{
+    public string Email { get; set; } = string.Empty;
+    public string Token { get; set; } = string.Empty;
+    public string NewPassword { get; set; } = string.Empty;
+}
+
+public class VerifyEmailRequest
+{
+    public string Email { get; set; } = string.Empty;
+    public string Token { get; set; } = string.Empty;
+}
+
+public class ResendVerificationEmailRequest
+{
+    public string Email { get; set; } = string.Empty;
+}
+

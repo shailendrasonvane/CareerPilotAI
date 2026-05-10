@@ -4,6 +4,7 @@ using CareerPilot.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CareerPilot.Persistence.Migrations
 {
     [DbContext(typeof(CareerPilotDbContext))]
-    partial class CareerPilotDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260510154845_Phase2AuthAndUser")]
+    partial class Phase2AuthAndUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,6 +95,20 @@ namespace CareerPilot.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedDate = new DateTime(2026, 5, 10, 15, 48, 42, 335, DateTimeKind.Utc).AddTicks(7801),
+                            Email = "admin@careerpilot.com",
+                            FirstName = "Admin",
+                            IsActive = true,
+                            IsEmailVerified = true,
+                            LastName = "User",
+                            PasswordHash = "AQAAAAIAAYagAAAAECTfCkZo5PCHSOtJ4HIKvUeiS6guPSv7KY01ttHjwUKNZ3JbjFiWan/k5sVvYQZKhg==",
+                            Role = "Admin"
+                        });
                 });
 #pragma warning restore 612, 618
         }

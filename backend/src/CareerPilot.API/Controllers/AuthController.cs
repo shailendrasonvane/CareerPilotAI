@@ -55,6 +55,46 @@ public class AuthController : ControllerBase
 
         return Ok(ApiResponse<string>.SuccessResponse("Logout successful"));
     }
+
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+    {
+        var result = await _authService.ForgotPasswordAsync(request);
+        if (!result.IsSuccess)
+            return BadRequest(ApiResponse<string>.FailureResponse(result.Message));
+
+        return Ok(ApiResponse<string>.SuccessResponse(result.Message));
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+    {
+        var result = await _authService.ResetPasswordAsync(request);
+        if (!result.IsSuccess)
+            return BadRequest(ApiResponse<string>.FailureResponse(result.Message));
+
+        return Ok(ApiResponse<string>.SuccessResponse(result.Message));
+    }
+
+    [HttpPost("verify-email")]
+    public async Task<IActionResult> VerifyEmail([FromBody] VerifyEmailRequest request)
+    {
+        var result = await _authService.VerifyEmailAsync(request);
+        if (!result.IsSuccess)
+            return BadRequest(ApiResponse<string>.FailureResponse(result.Message));
+
+        return Ok(ApiResponse<string>.SuccessResponse(result.Message));
+    }
+
+    [HttpPost("resend-verification-email")]
+    public async Task<IActionResult> ResendVerificationEmail([FromBody] ResendVerificationEmailRequest request)
+    {
+        var result = await _authService.ResendVerificationEmailAsync(request);
+        if (!result.IsSuccess)
+            return BadRequest(ApiResponse<string>.FailureResponse(result.Message));
+
+        return Ok(ApiResponse<string>.SuccessResponse(result.Message));
+    }
 }
 
 public class RefreshTokenRequest
