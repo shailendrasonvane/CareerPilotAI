@@ -23,6 +23,10 @@ import PersonalDetailsForm from '../components/ResumeBuilder/PersonalDetailsForm
 import ExperienceForm from '../components/ResumeBuilder/ExperienceForm';
 import EducationForm from '../components/ResumeBuilder/EducationForm';
 import SkillsForm from '../components/ResumeBuilder/SkillsForm';
+import ProjectsForm from '../components/ResumeBuilder/ProjectsForm';
+import CertificatesForm from '../components/ResumeBuilder/CertificatesForm';
+import LanguagesForm from '../components/ResumeBuilder/LanguagesForm';
+import AwardsForm from '../components/ResumeBuilder/AwardsForm';
 import ResumePreview from '../components/ResumeBuilder/ResumePreview';
 
 const ResumeBuilder = () => {
@@ -76,7 +80,7 @@ const ResumeBuilder = () => {
       <header className="bg-white border-b px-6 py-3 flex items-center justify-between shadow-sm z-10">
         <div className="flex items-center gap-4">
           <button 
-            onClick={() => navigate('/resume/dashboard')}
+            onClick={() => navigate('/resumes')}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
           >
             <ChevronLeft size={20} />
@@ -148,9 +152,33 @@ const ResumeBuilder = () => {
                 onChange={(val) => handleChange({ skills: val })} 
               />
             )}
+            {activeSection === 'projects' && (
+              <ProjectsForm 
+                data={activeResume.projects} 
+                onChange={(val) => handleChange({ projects: val })} 
+              />
+            )}
+            {activeSection === 'certificates' && (
+              <CertificatesForm 
+                data={activeResume.certificates} 
+                onChange={(val) => handleChange({ certificates: val })} 
+              />
+            )}
+            {activeSection === 'languages' && (
+              <LanguagesForm 
+                data={activeResume.languages} 
+                onChange={(val) => handleChange({ languages: val })} 
+              />
+            )}
+            {activeSection === 'awards' && (
+              <AwardsForm 
+                data={activeResume.awards} 
+                onChange={(val) => handleChange({ awards: val })} 
+              />
+            )}
             
             {/* Other sections would follow similar pattern */}
-            {!['personal', 'experience', 'education', 'skills'].includes(activeSection) && (
+            {!['personal', 'experience', 'education', 'skills', 'projects', 'certificates', 'languages', 'awards'].includes(activeSection) && (
               <div className="text-center py-20">
                 <PlusCircle size={48} className="mx-auto text-gray-300 mb-4" />
                 <h3 className="text-lg font-medium">{activeSection.charAt(0).toUpperCase() + activeSection.slice(1)} Module</h3>

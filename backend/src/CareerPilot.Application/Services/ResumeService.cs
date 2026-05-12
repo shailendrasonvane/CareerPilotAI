@@ -85,13 +85,60 @@ public class ResumeService : IResumeService
         if (resume == null) return Result<ResumeDto>.Failure("Resume not found");
 
         // Update basic info
-        _mapper.Map(request, resume);
+        resume.Title = request.Title;
+        resume.Summary = request.Summary;
+        resume.ThemeColor = request.ThemeColor;
+        resume.FontFamily = request.FontFamily;
+        resume.IsDefault = request.IsDefault;
+        resume.IsPublic = request.IsPublic;
         resume.UpdatedDate = DateTime.UtcNow;
+
+        // Update Personal Details
+        if (request.PersonalDetails != null)
+        {
+            _mapper.Map(request.PersonalDetails, resume.PersonalDetails);
+        }
+
+        // Sync Collections Helper Logic
+        SyncCollection(resume.Experiences, request.Experiences, (src, dest) => _mapper.Map(src, dest));
+        SyncCollection(resume.Educations, request.Educations, (src, dest) => _mapper.Map(src, dest));
+        SyncCollection(resume.Skills, request.Skills, (src, dest) => _mapper.Map(src, dest));
+        SyncCollection(resume.Projects, request.Projects, (src, dest) => _mapper.Map(src, dest));
+        SyncCollection(resume.Certificates, request.Certificates, (src, dest) => _mapper.Map(src, dest));
+        SyncCollection(resume.Languages, request.Languages, (src, dest) => _mapper.Map(src, dest));
+        SyncCollection(resume.Awards, request.Awards, (src, dest) => _mapper.Map(src, dest));
+        SyncCollection(resume.CustomSections, request.CustomSections, (src, dest) => _mapper.Map(src, dest));
 
         _unitOfWork.Repository<Resume>().Update(resume);
         await _unitOfWork.SaveChangesAsync();
 
         return Result<ResumeDto>.Success(_mapper.Map<ResumeDto>(resume));
+    }
+
+    private void SyncCollection<TEntity, TDto>(ICollection<TEntity> dbCollection, List<TDto> requestList, Action<TDto, TEntity> mapAction) 
+        where TEntity : class, new()
+    {
+        // 1. Remove items not in request
+        var requestIds = requestList.Select(d => (int?)((dynamic)d).Id).Where(id => id > 0).ToList();
+        var toRemove = dbCollection.Where(e => !requestIds.Contains(((dynamic)e).Id)).ToList();
+        foreach (var item in toRemove) dbCollection.Remove(item);
+
+        // 2. Add or Update
+        foreach (var dto in requestList)
+        {
+            var dtoId = (int)((dynamic)dto).Id;
+            if (dtoId > 0)
+            {
+                var existing = dbCollection.FirstOrDefault(e => ((dynamic)e).Id == dtoId);
+                if (existing != null) mapAction(dto, existing);
+            }
+            else
+            {
+                var newItem = new TEntity();
+                mapAction(dto, newItem);
+                dbCollection.Add(newItem);
+            }
+        }
     }
 
     public async Task<Result> DeleteResumeAsync(int userId, int resumeId)

@@ -113,6 +113,8 @@ public class CertificateDto
     public DateTime? ExpiryDate { get; set; }
     public string? CredentialId { get; set; }
     public string? CredentialUrl { get; set; }
+    public string? Description { get; set; }
+    public int DisplayOrder { get; set; }
 }
 
 public class LanguageDto
@@ -120,6 +122,7 @@ public class LanguageDto
     public int Id { get; set; }
     public string LanguageName { get; set; } = string.Empty;
     public string? ProficiencyLevel { get; set; }
+    public int DisplayOrder { get; set; }
 }
 
 public class AwardDto
@@ -129,6 +132,7 @@ public class AwardDto
     public string Organization { get; set; } = string.Empty;
     public DateTime? AwardDate { get; set; }
     public string? Description { get; set; }
+    public int DisplayOrder { get; set; }
 }
 
 public class CustomSectionDto
