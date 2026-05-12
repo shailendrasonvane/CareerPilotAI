@@ -1,30 +1,49 @@
 using CareerPilot.Application.Interfaces.Services;
-using Microsoft.Extensions.Configuration;
+using CareerPilot.Infrastructure.Models;
+using MailKit.Net.Smtp;
+using MailKit.Security;
+using Microsoft.Extensions.Options;
+using MimeKit;
 using Microsoft.Extensions.Logging;
 
 namespace CareerPilot.Infrastructure.Services;
 
 public class EmailService : IEmailService
 {
-    private readonly IConfiguration _configuration;
+    private readonly EmailSettings _emailSettings;
     private readonly ILogger<EmailService> _logger;
 
-    public EmailService(IConfiguration configuration, ILogger<EmailService> logger)
+    public EmailService(IOptions<EmailSettings> emailSettings, ILogger<EmailService> logger)
     {
-        _configuration = configuration;
+        _emailSettings = emailSettings.Value;
         _logger = logger;
     }
 
-    public Task SendEmailAsync(string to, string subject, string body)
+    public async Task SendEmailAsync(string to, string subject, string body)
     {
-        // For development purposes, log the email content instead of sending it.
-        // A real SMTP client would go here.
-        _logger.LogInformation("================ EMAIL SENT ================");
-        _logger.LogInformation($"To: {to}");
-        _logger.LogInformation($"Subject: {subject}");
-        _logger.LogInformation($"Body: {body}");
-        _logger.LogInformation("============================================");
+        try
+        {
+            var email = new MimeMessage();
+            email.From.Add(new MailboxAddress(_emailSettings.FromName, _emailSettings.FromEmail));
+            email.To.Add(MailboxAddress.Parse(to));
+            email.Subject = subject;
 
-        return Task.CompletedTask;
+            var builder = new BodyBuilder();
+            builder.HtmlBody = body;
+            email.Body = builder.ToMessageBody();
+
+            using var smtp = new SmtpClient();
+            await smtp.ConnectAsync(_emailSettings.SmtpHost, _emailSettings.SmtpPort, SecureSocketOptions.StartTls);
+            await smtp.AuthenticateAsync(_emailSettings.SmtpUser, _emailSettings.SmtpPass);
+            await smtp.SendAsync(email);
+            await smtp.DisconnectAsync(true);
+
+            _logger.LogInformation($"Email sent successfully to {to}");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error sending email to {to}");
+            throw;
+        }
     }
 }

@@ -6,6 +6,8 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
+import ResumeDashboard from './pages/ResumeDashboard';
+import ResumeBuilder from './pages/ResumeBuilder';
 import VerifyEmailPage from './pages/VerifyEmailPage';
 import ProfilePage from './pages/ProfilePage';
 import ChangePasswordPage from './pages/ChangePasswordPage';
@@ -114,7 +116,7 @@ const App = () => {
       {/* Protected Routes */}
       <Route element={<DashboardLayout />}>
         <Route path="/dashboard" element={<DashboardHome />} />
-        <Route path="/resumes" element={<div className="p-8">My Resumes Page</div>} />
+        <Route path="/resumes" element={<ResumeDashboard />} />
         <Route path="/jobs" element={<div className="p-8">Job Tracker Page</div>} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/change-password" element={<ChangePasswordPage />} />
@@ -124,6 +126,9 @@ const App = () => {
           <Route path="/admin" element={<AdminDashboard />} />
         </Route>
       </Route>
+
+      {/* Resume Editor */}
+      <Route path="/resume/builder/:id" element={<ResumeBuilder />} />
 
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />

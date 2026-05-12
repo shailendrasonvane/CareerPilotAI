@@ -22,6 +22,8 @@ public class User : BaseEntity
 
     public string? RefreshToken { get; set; }
     public DateTime? RefreshTokenExpiryTime { get; set; }
+
+    public ICollection<Resume> Resumes { get; set; } = new List<Resume>();
 }
 
 

@@ -23,6 +23,8 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate) => 
         await _dbSet.Where(predicate).ToListAsync();
 
+    public IQueryable<T> GetQueryable() => _dbSet.AsQueryable();
+
     public async Task AddAsync(T entity) => await _dbSet.AddAsync(entity);
 
     public void Update(T entity) => _dbSet.Update(entity);
