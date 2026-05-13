@@ -4,6 +4,7 @@ using CareerPilot.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CareerPilot.Persistence.Migrations
 {
     [DbContext(typeof(CareerPilotDbContext))]
-    partial class CareerPilotDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260513115949_UpdateTemplateImages")]
+    partial class UpdateTemplateImages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

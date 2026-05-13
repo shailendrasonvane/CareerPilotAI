@@ -6,8 +6,13 @@ public class ResumeDto
     public string Title { get; set; } = string.Empty;
     public string ResumeSlug { get; set; } = string.Empty;
     public string? Summary { get; set; }
+    public int? TemplateId { get; set; }
+    public ResumeTemplateDto? Template { get; set; }
     public string? ThemeColor { get; set; }
     public string? FontFamily { get; set; }
+    public string? FontSize { get; set; }
+    public int SectionSpacing { get; set; }
+    public int LayoutSpacing { get; set; }
     public bool IsDefault { get; set; }
     public bool IsPublic { get; set; }
     public DateTime CreatedDate { get; set; }
@@ -24,6 +29,15 @@ public class ResumeDto
     public List<CustomSectionDto> CustomSections { get; set; } = new();
 }
 
+public class ResumeTemplateDto
+{
+    public int Id { get; set; }
+    public string TemplateName { get; set; } = string.Empty;
+    public string TemplateKey { get; set; } = string.Empty;
+    public string? PreviewImageUrl { get; set; }
+    public bool IsPremium { get; set; }
+}
+
 public class CreateResumeRequest
 {
     public string Title { get; set; } = string.Empty;
@@ -33,10 +47,25 @@ public class UpdateResumeRequest
 {
     public string Title { get; set; } = string.Empty;
     public string? Summary { get; set; }
+    public int? TemplateId { get; set; }
     public string? ThemeColor { get; set; }
     public string? FontFamily { get; set; }
+    public string? FontSize { get; set; }
+    public int? SectionSpacing { get; set; }
+    public int? LayoutSpacing { get; set; }
     public bool IsDefault { get; set; }
     public bool IsPublic { get; set; }
+    
+    // Resume content
+    public PersonalDetailsDto? PersonalDetails { get; set; }
+    public List<ExperienceDto>? Experiences { get; set; }
+    public List<EducationDto>? Educations { get; set; }
+    public List<SkillDto>? Skills { get; set; }
+    public List<ProjectDto>? Projects { get; set; }
+    public List<CertificateDto>? Certificates { get; set; }
+    public List<LanguageDto>? Languages { get; set; }
+    public List<AwardDto>? Awards { get; set; }
+    public List<CustomSectionDto>? CustomSections { get; set; }
 }
 
 public class PersonalDetailsDto

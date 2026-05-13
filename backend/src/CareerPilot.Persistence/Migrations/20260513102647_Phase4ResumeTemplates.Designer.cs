@@ -4,6 +4,7 @@ using CareerPilot.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CareerPilot.Persistence.Migrations
 {
     [DbContext(typeof(CareerPilotDbContext))]
-    partial class CareerPilotDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260513102647_Phase4ResumeTemplates")]
+    partial class Phase4ResumeTemplates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -543,7 +546,6 @@ namespace CareerPilot.Persistence.Migrations
                             CreatedDate = new DateTime(2026, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsPremium = false,
-                            PreviewImageUrl = "/templates/modern.png",
                             TemplateKey = "modern",
                             TemplateName = "Modern Professional"
                         },
@@ -553,7 +555,6 @@ namespace CareerPilot.Persistence.Migrations
                             CreatedDate = new DateTime(2026, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsPremium = false,
-                            PreviewImageUrl = "/templates/corporate.png",
                             TemplateKey = "corporate",
                             TemplateName = "Corporate Classic"
                         },
@@ -563,7 +564,6 @@ namespace CareerPilot.Persistence.Migrations
                             CreatedDate = new DateTime(2026, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsPremium = false,
-                            PreviewImageUrl = "/templates/minimal.png",
                             TemplateKey = "minimal",
                             TemplateName = "Minimalist Clean"
                         },
@@ -573,7 +573,6 @@ namespace CareerPilot.Persistence.Migrations
                             CreatedDate = new DateTime(2026, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsPremium = true,
-                            PreviewImageUrl = "/templates/creative.png",
                             TemplateKey = "creative",
                             TemplateName = "Creative Edge"
                         },
@@ -583,7 +582,6 @@ namespace CareerPilot.Persistence.Migrations
                             CreatedDate = new DateTime(2026, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsPremium = false,
-                            PreviewImageUrl = "/templates/ats.png",
                             TemplateKey = "ats",
                             TemplateName = "ATS Optimizer"
                         });

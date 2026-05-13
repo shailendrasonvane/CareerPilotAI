@@ -21,5 +21,6 @@ public class MappingProfile : Profile
         CreateMap<ResumeLanguage, LanguageDto>().ReverseMap();
         CreateMap<ResumeAward, AwardDto>().ReverseMap();
         CreateMap<ResumeCustomSection, CustomSectionDto>().ReverseMap();
+        CreateMap<ResumeTemplate, ResumeTemplateDto>().ReverseMap();
     }
 }

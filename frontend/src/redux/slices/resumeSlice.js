@@ -92,9 +92,26 @@ const resumeSlice = createSlice({
       .addCase(updateResume.pending, (state) => { state.saveLoading = true; })
       .addCase(updateResume.fulfilled, (state, action) => {
         state.saveLoading = false;
-        state.activeResume = action.payload;
+        console.log('[REDUX] updateResume.fulfilled - Server Data:', action.payload);
+        console.log('[REDUX] updateResume.fulfilled - Current Local Template:', state.activeResume?.template?.templateKey);
+        
+        // Merge server response with current state to ensure navigation properties are preserved
+        const mergedResume = { ...state.activeResume, ...action.payload };
+        
+        // Safety check: If server returned a null template but we have one locally, keep the local one
+        if (state.activeResume?.template && !action.payload.template) {
+          console.warn('[REDUX] Server returned null template. Preserving local template.');
+          mergedResume.template = state.activeResume.template;
+        }
+        
+        state.activeResume = mergedResume;
+        
         const index = state.resumes.findIndex(r => r.id === action.payload.id);
-        if (index !== -1) state.resumes[index] = action.payload;
+        if (index !== -1) {
+          state.resumes[index] = { ...state.resumes[index], ...action.payload };
+        }
+        
+        console.log('[REDUX] Final Active Template Key:', state.activeResume?.template?.templateKey);
       })
       .addCase(deleteResume.fulfilled, (state, action) => {
         state.resumes = state.resumes.filter(r => r.id !== action.payload);

@@ -10,8 +10,15 @@ public class Resume : BaseEntity
     public string Title { get; set; } = string.Empty;
     public string ResumeSlug { get; set; } = string.Empty;
     public string? Summary { get; set; }
+    public int? TemplateId { get; set; }
+    public ResumeTemplate? Template { get; set; }
+
     public string? ThemeColor { get; set; }
     public string? FontFamily { get; set; }
+    public string? FontSize { get; set; } = "medium";
+    public int SectionSpacing { get; set; } = 20;
+    public int LayoutSpacing { get; set; } = 40;
+
     public bool IsDefault { get; set; }
     public bool IsPublic { get; set; }
 

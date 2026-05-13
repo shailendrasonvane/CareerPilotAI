@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using CareerPilot.Application.Interfaces.Repositories;
 using CareerPilot.Persistence.Context;
+using CareerPilot.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CareerPilot.Persistence.Repositories;
@@ -55,4 +56,16 @@ public class UnitOfWork : IUnitOfWork
     public async Task<int> SaveChangesAsync() => await _context.SaveChangesAsync();
 
     public void Dispose() => _context.Dispose();
+}
+
+public class ResumeTemplateRepository : GenericRepository<ResumeTemplate>, IResumeTemplateRepository
+{
+    public ResumeTemplateRepository(CareerPilotDbContext context) : base(context)
+    {
+    }
+
+    public async Task<ResumeTemplate?> GetByKeyAsync(string key)
+    {
+        return await _dbSet.FirstOrDefaultAsync(t => t.TemplateKey == key);
+    }
 }

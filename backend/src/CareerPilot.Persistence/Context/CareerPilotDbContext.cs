@@ -20,6 +20,7 @@ public class CareerPilotDbContext : DbContext
     public DbSet<ResumeLanguage> ResumeLanguages { get; set; }
     public DbSet<ResumeAward> ResumeAwards { get; set; }
     public DbSet<ResumeCustomSection> ResumeCustomSections { get; set; }
+    public DbSet<ResumeTemplate> ResumeTemplates { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -28,6 +29,13 @@ public class CareerPilotDbContext : DbContext
         modelBuilder.Entity<User>()
             .HasIndex(u => u.Email)
             .IsUnique();
+
+        modelBuilder.Entity<ResumeTemplate>(entity =>
+        {
+            entity.HasKey(t => t.Id);
+            entity.Property(t => t.TemplateName).IsRequired().HasMaxLength(100);
+            entity.Property(t => t.TemplateKey).IsRequired().HasMaxLength(50);
+        });
 
         modelBuilder.Entity<Resume>(entity =>
         {
@@ -38,7 +46,21 @@ public class CareerPilotDbContext : DbContext
                 .WithMany(u => u.Resumes)
                 .HasForeignKey(r => r.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(r => r.Template)
+                .WithMany(t => t.Resumes)
+                .HasForeignKey(r => r.TemplateId)
+                .OnDelete(DeleteBehavior.SetNull);
         });
+
+        // Seed Templates
+        modelBuilder.Entity<ResumeTemplate>().HasData(
+            new ResumeTemplate { Id = 1, TemplateName = "Modern Professional", TemplateKey = "modern", PreviewImageUrl = "/templates/modern.png", IsPremium = false, IsActive = true, CreatedDate = new DateTime(2026, 5, 1) },
+            new ResumeTemplate { Id = 2, TemplateName = "Corporate Classic", TemplateKey = "corporate", PreviewImageUrl = "/templates/corporate.png", IsPremium = false, IsActive = true, CreatedDate = new DateTime(2026, 5, 1) },
+            new ResumeTemplate { Id = 3, TemplateName = "Minimalist Clean", TemplateKey = "minimal", PreviewImageUrl = "/templates/minimal.png", IsPremium = false, IsActive = true, CreatedDate = new DateTime(2026, 5, 1) },
+            new ResumeTemplate { Id = 4, TemplateName = "Creative Edge", TemplateKey = "creative", PreviewImageUrl = "/templates/creative.png", IsPremium = true, IsActive = true, CreatedDate = new DateTime(2026, 5, 1) },
+            new ResumeTemplate { Id = 5, TemplateName = "ATS Optimizer", TemplateKey = "ats", PreviewImageUrl = "/templates/ats.png", IsPremium = false, IsActive = true, CreatedDate = new DateTime(2026, 5, 1) }
+        );
 
         modelBuilder.Entity<ResumePersonalDetails>(entity =>
         {

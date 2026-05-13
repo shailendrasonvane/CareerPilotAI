@@ -44,6 +44,7 @@ public class ResumeService : IResumeService
         var resume = await _unitOfWork.Repository<Resume>()
             .GetQueryable()
             .Include(r => r.PersonalDetails)
+            .Include(r => r.Template)
             .Include(r => r.Experiences)
             .Include(r => r.Educations)
             .Include(r => r.Skills)
@@ -72,6 +73,7 @@ public class ResumeService : IResumeService
         var resume = await _unitOfWork.Repository<Resume>()
             .GetQueryable()
             .Include(r => r.PersonalDetails)
+            .Include(r => r.Template)
             .Include(r => r.Experiences)
             .Include(r => r.Educations)
             .Include(r => r.Skills)
@@ -87,8 +89,12 @@ public class ResumeService : IResumeService
         // Update basic info
         resume.Title = request.Title;
         resume.Summary = request.Summary;
+        resume.TemplateId = request.TemplateId;
         resume.ThemeColor = request.ThemeColor;
         resume.FontFamily = request.FontFamily;
+        resume.FontSize = request.FontSize;
+        resume.SectionSpacing = request.SectionSpacing;
+        resume.LayoutSpacing = request.LayoutSpacing;
         resume.IsDefault = request.IsDefault;
         resume.IsPublic = request.IsPublic;
         resume.UpdatedDate = DateTime.UtcNow;
@@ -112,7 +118,22 @@ public class ResumeService : IResumeService
         _unitOfWork.Repository<Resume>().Update(resume);
         await _unitOfWork.SaveChangesAsync();
 
-        return Result<ResumeDto>.Success(_mapper.Map<ResumeDto>(resume));
+        // RELOAD: Ensure navigation properties match the newly saved Foreign Keys
+        var updatedResume = await _unitOfWork.Repository<Resume>()
+            .GetQueryable()
+            .Include(r => r.PersonalDetails)
+            .Include(r => r.Template)
+            .Include(r => r.Experiences)
+            .Include(r => r.Educations)
+            .Include(r => r.Skills)
+            .Include(r => r.Projects)
+            .Include(r => r.Certificates)
+            .Include(r => r.Languages)
+            .Include(r => r.Awards)
+            .Include(r => r.CustomSections)
+            .FirstOrDefaultAsync(r => r.Id == resumeId && r.UserId == userId);
+
+        return Result<ResumeDto>.Success(_mapper.Map<ResumeDto>(updatedResume));
     }
 
     private void SyncCollection<TEntity, TDto>(ICollection<TEntity> dbCollection, List<TDto> requestList, Action<TDto, TEntity> mapAction) 
@@ -158,6 +179,7 @@ public class ResumeService : IResumeService
             .GetQueryable()
             .AsNoTracking()
             .Include(r => r.PersonalDetails)
+            .Include(r => r.Template)
             .Include(r => r.Experiences)
             .Include(r => r.Educations)
             .Include(r => r.Skills)
