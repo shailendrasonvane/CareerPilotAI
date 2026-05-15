@@ -55,6 +55,15 @@ export const duplicateResume = createAsyncThunk('resume/duplicateResume', async 
   }
 });
 
+export const updateResumeTitle = createAsyncThunk('resume/updateResumeTitle', async ({ id, title }, { rejectWithValue }) => {
+  try {
+    const response = await api.put(`/resume/${id}/title`, { title });
+    return response.data.data;
+  } catch (error) {
+    return rejectWithValue(error.response?.data?.message || 'Failed to update resume title');
+  }
+});
+
 const resumeSlice = createSlice({
   name: 'resume',
   initialState: {
@@ -112,6 +121,21 @@ const resumeSlice = createSlice({
         }
         
         console.log('[REDUX] Final Active Template Key:', state.activeResume?.template?.templateKey);
+      })
+      .addCase(updateResumeTitle.pending, (state) => {
+        state.saveLoading = true;
+      })
+      .addCase(updateResumeTitle.fulfilled, (state, action) => {
+        state.saveLoading = false;
+        state.activeResume = { ...state.activeResume, title: action.payload.title };
+        
+        const index = state.resumes.findIndex(r => r.id === action.payload.id);
+        if (index !== -1) {
+          state.resumes[index].title = action.payload.title;
+        }
+      })
+      .addCase(updateResumeTitle.rejected, (state) => {
+        state.saveLoading = false;
       })
       .addCase(deleteResume.fulfilled, (state, action) => {
         state.resumes = state.resumes.filter(r => r.id !== action.payload);

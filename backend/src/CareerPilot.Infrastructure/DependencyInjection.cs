@@ -14,6 +14,8 @@ public static class DependencyInjection
         
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IPdfExportService, PdfExportService>();
+        services.AddScoped<IDocxExportService, DocxExportService>();
         
         return services;
     }

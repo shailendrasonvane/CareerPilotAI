@@ -2,18 +2,18 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/slices/authSlice';
-import { Layout, User, LogOut, Settings } from 'lucide-react';
+import { LogOut } from 'lucide-react';
+import Logo from '../assets/branding/Logo';
 
 const Navbar = () => {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   return (
-    <nav className="bg-white border-b border-slate-100 h-16 flex items-center px-6 sticky top-0 z-50">
-      <div className="flex items-center gap-2 font-bold text-xl text-primary-600">
-        <Layout className="w-8 h-8" />
-        <span>CareerPilot AI</span>
-      </div>
+    <nav className="bg-white/80 backdrop-blur-md border-b border-slate-100 h-16 flex items-center px-6 sticky top-0 z-50">
+      <Link to="/dashboard">
+        <Logo iconSize={32} fontSize="text-xl" />
+      </Link>
 
       <div className="flex-1" />
 

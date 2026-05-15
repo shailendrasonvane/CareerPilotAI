@@ -27,7 +27,7 @@ const ResumePreview = ({ data }) => {
   return (
     <div className="flex flex-col h-full w-full bg-gray-100">
       {/* Preview Toolbar */}
-      <div className="bg-white border-b px-4 py-2 flex items-center justify-between sticky top-0 z-20">
+      <div className="bg-white border-b px-4 py-2 flex items-center justify-between sticky top-0 z-20 preview-toolbar">
         <div className="flex items-center gap-1 bg-gray-100 p-1 rounded-lg">
           <button 
             onClick={() => setViewMode('desktop')}
@@ -77,13 +77,13 @@ const ResumePreview = ({ data }) => {
       {/* Preview Area */}
       <div className="flex-1 overflow-auto p-8 flex justify-center items-start custom-scrollbar">
         <div 
-          className={`transition-all duration-500 ease-in-out ${viewMode === 'mobile' ? 'w-[375px]' : 'w-full max-w-[210mm]'}`}
+          className={`transition-all duration-500 ease-in-out resume-container-wrapper ${viewMode === 'mobile' ? 'w-[375px]' : 'w-full max-w-[210mm]'}`}
           style={{ 
             transform: `scale(${zoom})`, 
             transformOrigin: 'top center',
           }}
         >
-          <div className="shadow-2xl ring-1 ring-gray-200">
+          <div className="shadow-2xl ring-1 ring-gray-200 resume-container">
             <TemplateComponent data={data} styles={styles} />
           </div>
         </div>

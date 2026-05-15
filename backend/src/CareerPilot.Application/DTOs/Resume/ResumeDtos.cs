@@ -171,3 +171,8 @@ public class CustomSectionDto
     public string SectionContent { get; set; } = string.Empty;
     public int DisplayOrder { get; set; }
 }
+
+public class UpdateResumeTitleRequest
+{
+    public string Title { get; set; } = string.Empty;
+}

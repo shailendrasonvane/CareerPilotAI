@@ -94,6 +94,20 @@ public class ResumeController : ControllerBase
         return Ok(ApiResponse<ResumeDto>.SuccessResponse(result.Value, "Resume duplicated successfully"));
     }
 
+
+    [HttpPut("{id}/title")]
+    public async Task<IActionResult> UpdateTitle(int id, UpdateResumeTitleRequest request)
+    {
+        var userId = GetUserId();
+        if (userId == null) return Unauthorized(ApiResponse<string>.FailureResponse("User not authorized"));
+
+        var result = await _resumeService.UpdateResumeTitleAsync(userId.Value, id, request.Title);
+        if (!result.IsSuccess)
+            return BadRequest(ApiResponse<ResumeDto>.FailureResponse(result.Message));
+
+        return Ok(ApiResponse<ResumeDto>.SuccessResponse(result.Value, "Resume title updated successfully"));
+    }
+
     private int? GetUserId()
     {
         var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

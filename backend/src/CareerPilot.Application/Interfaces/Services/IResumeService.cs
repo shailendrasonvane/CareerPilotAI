@@ -11,4 +11,5 @@ public interface IResumeService
     Task<Result<ResumeDto>> UpdateResumeAsync(int userId, int resumeId, ResumeDto request);
     Task<Result> DeleteResumeAsync(int userId, int resumeId);
     Task<Result<ResumeDto>> DuplicateResumeAsync(int userId, int resumeId);
+    Task<Result<ResumeDto>> UpdateResumeTitleAsync(int userId, int resumeId, string title);
 }

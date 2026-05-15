@@ -175,45 +175,91 @@ public class ResumeService : IResumeService
 
     public async Task<Result<ResumeDto>> DuplicateResumeAsync(int userId, int resumeId)
     {
-        var original = await _unitOfWork.Repository<Resume>()
-            .GetQueryable()
-            .AsNoTracking()
-            .Include(r => r.PersonalDetails)
-            .Include(r => r.Template)
-            .Include(r => r.Experiences)
-            .Include(r => r.Educations)
-            .Include(r => r.Skills)
-            .Include(r => r.Projects)
-            .Include(r => r.Certificates)
-            .Include(r => r.Languages)
-            .Include(r => r.Awards)
-            .Include(r => r.CustomSections)
-            .FirstOrDefaultAsync(r => r.Id == resumeId && r.UserId == userId);
+        try
+        {
+            var original = await _unitOfWork.Repository<Resume>()
+                .GetQueryable()
+                .AsNoTracking()
+                .Include(r => r.PersonalDetails)
+                .Include(r => r.Template)
+                .Include(r => r.Experiences)
+                .Include(r => r.Educations)
+                .Include(r => r.Skills)
+                .Include(r => r.Projects)
+                .Include(r => r.Certificates)
+                .Include(r => r.Languages)
+                .Include(r => r.Awards)
+                .Include(r => r.CustomSections)
+                .FirstOrDefaultAsync(r => r.Id == resumeId && r.UserId == userId);
 
-        if (original == null) return Result<ResumeDto>.Failure("Original resume not found");
+            if (original == null) return Result<ResumeDto>.Failure("Original resume not found");
 
-        var duplicate = _mapper.Map<Resume>(original);
-        duplicate.Id = 0;
-        duplicate.Title = $"{original.Title} (Copy)";
-        duplicate.ResumeSlug = $"{duplicate.Title.ToLower().Replace(" ", "-")}-{Guid.NewGuid().ToString()[..8]}";
-        duplicate.CreatedDate = DateTime.UtcNow;
-        duplicate.UpdatedDate = null;
-        duplicate.IsDefault = false;
+            // Use the deep-copy mapping configured in MappingProfile
+            var duplicate = _mapper.Map<Resume>(original);
+            
+            // Generate unique title
+            var baseTitle = original.Title;
+            if (baseTitle.EndsWith(" (Copy)"))
+            {
+                baseTitle = baseTitle.Replace(" (Copy)", "");
+            }
+            
+            var existingTitles = await _unitOfWork.Repository<Resume>()
+                .GetQueryable()
+                .Where(r => r.UserId == userId && r.Title.StartsWith(baseTitle))
+                .Select(r => r.Title)
+                .ToListAsync();
 
-        // Reset IDs for all sub-entities
-        if (duplicate.PersonalDetails != null) duplicate.PersonalDetails.Id = 0;
-        foreach (var item in duplicate.Experiences) item.Id = 0;
-        foreach (var item in duplicate.Educations) item.Id = 0;
-        foreach (var item in duplicate.Skills) item.Id = 0;
-        foreach (var item in duplicate.Projects) item.Id = 0;
-        foreach (var item in duplicate.Certificates) item.Id = 0;
-        foreach (var item in duplicate.Languages) item.Id = 0;
-        foreach (var item in duplicate.Awards) item.Id = 0;
-        foreach (var item in duplicate.CustomSections) item.Id = 0;
+            var newTitle = $"{baseTitle} (Copy)";
+            int counter = 2;
+            while (existingTitles.Contains(newTitle))
+            {
+                newTitle = $"{baseTitle} (Copy {counter++})";
+            }
 
-        await _unitOfWork.Repository<Resume>().AddAsync(duplicate);
+            // Set properties for the new record
+            duplicate.UserId = userId;
+            duplicate.Title = newTitle;
+            duplicate.ResumeSlug = $"{newTitle.ToLower().Replace(" ", "-").Replace("(", "").Replace(")", "")}-{Guid.NewGuid().ToString()[..8]}";
+            duplicate.CreatedDate = DateTime.UtcNow;
+            duplicate.UpdatedDate = null;
+            duplicate.IsDefault = false;
+
+            // Ensure PersonalDetails back-reference is set (EF usually handles this but being explicit)
+            if (duplicate.PersonalDetails != null)
+            {
+                duplicate.PersonalDetails.Resume = duplicate;
+            }
+
+            await _unitOfWork.Repository<Resume>().AddAsync(duplicate);
+            await _unitOfWork.SaveChangesAsync();
+
+            return Result<ResumeDto>.Success(_mapper.Map<ResumeDto>(duplicate));
+        }
+        catch (Exception ex)
+        {
+            var errorMessage = ex.InnerException != null ? $"{ex.Message} Inner: {ex.InnerException.Message}" : ex.Message;
+            Console.WriteLine($"Error duplicating resume: {errorMessage}");
+            Console.WriteLine(ex.StackTrace);
+            return Result<ResumeDto>.Failure($"Duplication failed: {errorMessage}");
+        }
+    }
+
+    public async Task<Result<ResumeDto>> UpdateResumeTitleAsync(int userId, int resumeId, string title)
+    {
+        if (string.IsNullOrWhiteSpace(title))
+            return Result<ResumeDto>.Failure("Title is required");
+
+        var resume = await _unitOfWork.Repository<Resume>().GetByIdAsync(resumeId);
+        if (resume == null || resume.UserId != userId)
+            return Result<ResumeDto>.Failure("Resume not found");
+
+        resume.Title = title.Trim();
+        resume.UpdatedDate = DateTime.UtcNow;
+
+        _unitOfWork.Repository<Resume>().Update(resume);
         await _unitOfWork.SaveChangesAsync();
 
-        return Result<ResumeDto>.Success(_mapper.Map<ResumeDto>(duplicate));
+        return Result<ResumeDto>.Success(_mapper.Map<ResumeDto>(resume));
     }
 }
