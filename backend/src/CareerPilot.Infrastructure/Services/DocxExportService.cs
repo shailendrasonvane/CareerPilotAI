@@ -57,7 +57,7 @@ public class DocxExportService : IDocxExportService
                 {
                     var titlePara = body.AppendChild(new Paragraph(new ParagraphProperties(new Justification { Val = JustificationValues.Center })));
                     ApplyStyle(titlePara, "Subtitle");
-                    titlePara.AppendChild(new Run(new Text(resume.PersonalDetails.JobTitle)));
+                    titlePara.AppendChild(new Run(new Text(resume.PersonalDetails.JobTitle ?? "")));
                 }
 
                 // Contact Info
@@ -92,7 +92,7 @@ public class DocxExportService : IDocxExportService
                 {
                     AddSectionHeading(body, "PROFESSIONAL SUMMARY");
                     var summaryPara = body.AppendChild(new Paragraph());
-                    summaryPara.AppendChild(new Run(new Text(resume.Summary)));
+                    summaryPara.AppendChild(new Run(new Text(resume.Summary ?? "")));
                     body.AppendChild(new Paragraph(new Run(new Break())));
                 }
 
@@ -109,8 +109,8 @@ public class DocxExportService : IDocxExportService
                         
                         var leftCell = row.AppendChild(new TableCell());
                         var p1 = leftCell.AppendChild(new Paragraph());
-                        var r1 = p1.AppendChild(new Run(new RunProperties(new Bold()), new Text(exp.Position)));
-                        var p2 = leftCell.AppendChild(new Paragraph(new Run(new Text(exp.CompanyName))));
+                        var r1 = p1.AppendChild(new Run(new RunProperties(new Bold()), new Text(exp.Position ?? "")));
+                        var p2 = leftCell.AppendChild(new Paragraph(new Run(new Text(exp.CompanyName ?? ""))));
 
                         var rightCell = row.AppendChild(new TableCell());
                         var p3 = rightCell.AppendChild(new Paragraph(new ParagraphProperties(new Justification { Val = JustificationValues.Right })));
@@ -122,7 +122,7 @@ public class DocxExportService : IDocxExportService
                         if (!string.IsNullOrEmpty(exp.Description))
                         {
                             var descPara = body.AppendChild(new Paragraph());
-                            descPara.AppendChild(new Run(new RunProperties(new FontSize { Val = "20" }), new Text(exp.Description)));
+                            descPara.AppendChild(new Run(new RunProperties(new FontSize { Val = "20" }), new Text(exp.Description ?? "")));
                         }
                         body.AppendChild(new Paragraph(new Run(new Break())));
                     }
@@ -139,8 +139,8 @@ public class DocxExportService : IDocxExportService
                         var row = eduTable.AppendChild(new TableRow());
                         
                         var leftCell = row.AppendChild(new TableCell());
-                        leftCell.AppendChild(new Paragraph(new Run(new RunProperties(new Bold()), new Text($"{edu.Degree} in {edu.FieldOfStudy}"))));
-                        leftCell.AppendChild(new Paragraph(new Run(new Text(edu.InstitutionName))));
+                        leftCell.AppendChild(new Paragraph(new Run(new RunProperties(new Bold()), new Text($"{edu.Degree ?? ""} in {edu.FieldOfStudy ?? ""}"))));
+                        leftCell.AppendChild(new Paragraph(new Run(new Text(edu.InstitutionName ?? ""))));
 
                         var rightCell = row.AppendChild(new TableCell());
                         var p2 = rightCell.AppendChild(new Paragraph(new ParagraphProperties(new Justification { Val = JustificationValues.Right })));

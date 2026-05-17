@@ -150,7 +150,7 @@ const ResumeBuilder = () => {
       toast.success(`${type.toUpperCase()} exported successfully!`, { id: toastId });
     } catch (error) {
       console.error('Export failed:', error);
-      toast.error(`Failed to export ${type.toUpperCase()}. Please try again.`, { id: toastId });
+      toast.error(`Failed to export ${type.toUpperCase()}: ${error.message || 'Please try again.'}`, { id: toastId });
     } finally {
       setIsExporting(false);
     }

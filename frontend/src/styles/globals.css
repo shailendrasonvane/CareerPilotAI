@@ -71,7 +71,7 @@
 
 @media print {
   /* Hide UI elements on standard pages */
-  header, nav, aside, footer, .no-print, .builder-sidebar, .editor-panel, .toast-container {
+  header:not(.resume-container header), nav, aside, footer:not(.resume-container footer), .no-print, .builder-sidebar, .editor-panel, .toast-container {
     display: none !important;
   }
 

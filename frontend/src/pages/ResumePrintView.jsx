@@ -53,10 +53,28 @@ const ResumePrintView = () => {
         body {
           margin: 0;
           background: white;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
         }
         @media print {
-          .no-print {
-            display: none !important;
+          body * {
+            visibility: hidden;
+          }
+          .resume-container, .resume-container * {
+            visibility: visible;
+          }
+          .resume-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            margin: 0;
+            padding: 0;
+            width: 210mm !important;
+            min-height: 297mm !important;
+          }
+          .resume-section {
+            break-inside: avoid;
+            page-break-inside: avoid;
           }
         }
       `}</style>

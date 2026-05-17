@@ -120,8 +120,6 @@ const App = () => {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
-        <Route path="/resume/print/:id" element={<ResumePrintView />} />
-        <Route path="/resume/export/:id" element={<ResumeExportView />} />
         <Route path="/verify-email" element={<VerifyEmailPage />} />
       </Route>
 
@@ -139,9 +137,10 @@ const App = () => {
         </Route>
       </Route>
 
-      {/* Resume Editor */}
+      {/* Resume Editor & Print/Export */}
       <Route path="/resume/builder/:id" element={<ResumeBuilder />} />
       <Route path="/resume/print/:id" element={<ResumePrintView />} />
+      <Route path="/resume/export/:id" element={<ResumeExportView />} />
 
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />

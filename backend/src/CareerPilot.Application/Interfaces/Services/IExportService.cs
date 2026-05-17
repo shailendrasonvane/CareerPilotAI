@@ -17,6 +17,7 @@ public class ExportRequest
     public string PaperSize { get; set; } = "A4";
     public string Margin { get; set; } = "1cm";
     public bool IncludeProfileImage { get; set; } = true;
+    public string Token { get; set; } = string.Empty;
 }
 
 public class ExportResult

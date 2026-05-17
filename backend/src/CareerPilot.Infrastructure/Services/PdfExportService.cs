@@ -3,6 +3,7 @@ using CareerPilot.Application.Interfaces.Services;
 using CareerPilot.Domain.Entities;
 using CareerPilot.Shared;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using PuppeteerSharp;
 using PuppeteerSharp.Media;
 
@@ -12,11 +13,13 @@ public class PdfExportService : IPdfExportService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IResumeService _resumeService;
+    private readonly ILogger<PdfExportService> _logger;
 
-    public PdfExportService(IUnitOfWork unitOfWork, IResumeService resumeService)
+    public PdfExportService(IUnitOfWork unitOfWork, IResumeService resumeService, ILogger<PdfExportService> logger)
     {
         _unitOfWork = unitOfWork;
         _resumeService = resumeService;
+        _logger = logger;
     }
 
     public async Task<Result<ExportResult>> ExportPdfAsync(int userId, int resumeId, ExportRequest request)
@@ -48,18 +51,35 @@ public class PdfExportService : IPdfExportService
                 DeviceScaleFactor = 1
             });
 
-            string printUrl = $"{request.BaseUrl.TrimEnd('/')}/resume/export/{resumeId}";
-            
-            // Navigate and wait for the "is_ready_for_pdf" signal or full network idle
-            await page.GoToAsync(printUrl, new NavigationOptions 
-            { 
-                WaitUntil = new[] { WaitUntilNavigation.Networkidle2, WaitUntilNavigation.Load },
-                Timeout = 30000 
+            string printUrl = $"{request.BaseUrl.TrimEnd('/')}/resume/export/{resumeId}?token={request.Token}";
+
+            // Navigate to export page
+            await page.GoToAsync(printUrl, new NavigationOptions
+            {
+                WaitUntil = new[] { WaitUntilNavigation.DOMContentLoaded },
+                Timeout = 60000
             });
 
-            // Final check for the ready signal injected by ResumeExportView.jsx
-            await page.WaitForFunctionAsync("window.is_ready_for_pdf === true", new WaitForFunctionOptions { Timeout = 5000 });
+            // Give React/Vite enough time to hydrate and render
+            await Task.Delay(4000);
+            // Debug current ready state
+            var readyState = await page.EvaluateExpressionAsync<bool>(
+                "window.is_ready_for_pdf === true"
+            );
 
+            Console.WriteLine($"PDF Ready State Before Wait: {readyState}");
+
+            // Wait until frontend explicitly signals ready
+            await page.WaitForFunctionAsync(
+                "() => window.is_ready_for_pdf === true",
+                new WaitForFunctionOptions
+                {
+                    Timeout = 30000,
+                    PollingInterval = 500
+                }
+            );
+
+            Console.WriteLine("PDF ready signal detected successfully");
             // Generate PDF with exact A4 sizing and zero margins (CSS handles margins)
             var pdfData = await page.PdfDataAsync(new PdfOptions
             {
@@ -79,8 +99,14 @@ public class PdfExportService : IPdfExportService
                 ContentType = "application/pdf"
             });
         }
+        catch (WaitTaskTimeoutException ex)
+        {
+            _logger.LogError(ex, "Puppeteer wait task timed out. ResumeId: {ResumeId}. Ensure the frontend is setting window.is_ready_for_pdf = true.", resumeId);
+            return Result<ExportResult>.Failure("The document generation timed out. The preview page took too long to render.");
+        }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "PDF Export failed for ResumeId: {ResumeId}", resumeId);
             return Result<ExportResult>.Failure($"PDF Export failed: {ex.Message}");
         }
     }
