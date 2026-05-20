@@ -110,3 +110,50 @@
     margin: 0;
   }
 }
+
+/* Resume templates — natural height for preview pagination; print views set min-height */
+.resume-template-root {
+  min-height: auto;
+  height: auto;
+}
+
+.resume-container .resume-template-root {
+  box-shadow: none !important;
+}
+
+/* Corporate Classic — prevent flex divider lines from inflating section header height */
+.resume-template-root h2.flex > span.flex-1 {
+  height: 1px;
+  min-height: 0;
+  max-height: 1px;
+  align-self: center;
+}
+
+/* Resume builder — template gallery sidebar */
+.template-gallery {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.template-card {
+  min-width: 0;
+}
+
+.template-card__thumb {
+  isolation: isolate;
+}
+
+.template-card__label {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.template-card__name {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+.builder-sidebar .custom-scrollbar {
+  overflow-x: hidden;
+}

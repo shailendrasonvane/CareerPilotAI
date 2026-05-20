@@ -19,7 +19,7 @@ const ModernTemplate = ({ data, styles }) => {
 
   return (
     <div 
-      className="bg-white w-full max-w-[210mm] min-h-[297mm] shadow-lg mx-auto overflow-hidden"
+      className="resume-template-root bg-white w-full max-w-[210mm] h-auto mx-auto overflow-hidden box-border"
       style={{ fontFamily, color: '#333' }}
     >
       <div className="flex flex-col h-full">
@@ -141,9 +141,9 @@ const ModernTemplate = ({ data, styles }) => {
                   <div className="flex flex-col gap-4">
                     {data.skills.map((skill, index) => (
                       <div key={index}>
-                        <div className="flex justify-between text-[11px] font-bold uppercase mb-2 text-gray-700">
-                          <span>{skill.skillName}</span>
-                          <span className="text-gray-400">{skill.skillLevel}</span>
+                        <div className="flex justify-between items-center flex-wrap gap-1 text-[11px] font-bold uppercase mb-2 text-gray-700 w-full min-w-0">
+                          <span className="truncate max-w-[70%]" title={skill.skillName}>{skill.skillName}</span>
+                          <span className="text-gray-400 whitespace-nowrap flex-shrink-0">{skill.skillLevel}</span>
                         </div>
                         <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
                           <div 
@@ -171,6 +171,25 @@ const ModernTemplate = ({ data, styles }) => {
                       <div key={index} className="border-l-2 border-gray-100 pl-4 py-1">
                         <h3 className="text-sm font-bold text-gray-800">{proj.projectName}</h3>
                         <p className="text-[11px] text-gray-500 mt-1 line-clamp-3">{proj.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {/* Languages */}
+              {data.languages?.length > 0 && (
+                <section>
+                  <h2 className="text-xl font-black uppercase tracking-tight mb-6" style={{ color: themeColor }}>
+                    Languages
+                  </h2>
+                  <div className="flex flex-col gap-3">
+                    {data.languages.map((lang, index) => (
+                      <div key={index} className="flex justify-between items-center flex-wrap gap-x-2 gap-y-1 text-xs font-semibold text-gray-700 w-full min-w-0">
+                        <span className="truncate max-w-[60%]" title={lang.languageName}>{lang.languageName}</span>
+                        <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded bg-gray-100 text-gray-500 tracking-wider whitespace-nowrap flex-shrink-0">
+                          {lang.proficiencyLevel}
+                        </span>
                       </div>
                     ))}
                   </div>

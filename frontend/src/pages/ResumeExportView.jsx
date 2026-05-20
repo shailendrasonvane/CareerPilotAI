@@ -109,7 +109,7 @@ const ResumeExportView = () => {
         The resume-container class is crucial for the CSS masking.
         We force A4 dimensions here for exact visual fidelity.
       */}
-      <div className="resume-container mx-auto pt-2" style={{ width: '210mm', minHeight: '297mm' }}>
+      <div className="resume-container mx-auto" style={{ width: '210mm' }}>
         <TemplateComponent data={activeResume} styles={styles} />
       </div>
 
@@ -129,20 +129,46 @@ const ResumeExportView = () => {
           position: relative;
           box-sizing: border-box;
           overflow: visible;
-          /* Extra safety margin to prevent top edge clipping */
-          padding-top: 10px;
+          padding: 0 !important;
+          margin: 0 auto !important;
         }
 
-        /* Prevent sections from being split awkwardly across pages */
-        .resume-section {
-          break-inside: avoid;
-          page-break-inside: avoid;
+        .resume-template-root {
+          min-height: auto !important;
+          height: auto !important;
+          box-shadow: none !important;
+        }
+
+        /* Prevent sections and headings from being split awkwardly across pages */
+        h1, h2, h3, h4, header {
+          break-after: avoid;
+          page-break-after: avoid;
+        }
+
+        section, .resume-section {
+          break-inside: auto !important;
+          page-break-inside: auto !important;
           margin-bottom: ${styles.sectionSpacing}px;
+        }
+
+        /* Prevent individual content blocks from splitting midway */
+        section > div > div, 
+        section li,
+        .resume-item {
+          break-inside: avoid !important;
+          page-break-inside: avoid !important;
+        }
+
+        /* Strip double shadows from templates to ensure crisp PDF rendering */
+        .resume-container [class*="shadow-"] {
+          box-shadow: none !important;
         }
 
         @media print {
           html, body {
             width: 210mm;
+            margin: 0 !important;
+            padding: 0 !important;
             background: white !important;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
@@ -150,10 +176,17 @@ const ResumeExportView = () => {
 
           .resume-container {
             width: 210mm !important;
+            min-height: auto !important;
+            height: auto !important;
             box-shadow: none !important;
             border: none !important;
             margin: 0 auto !important;
-            padding-top: 12px !important;
+            padding: 0 !important;
+          }
+
+          .resume-template-root {
+            min-height: auto !important;
+            height: auto !important;
           }
 
           /* Ensure proper box sizing and spacing for all elements */
@@ -164,7 +197,7 @@ const ResumeExportView = () => {
 
         @page {
           size: A4;
-          margin: 6mm 0mm; /* Safe vertical margins, full horizontal bleed */
+          margin: 0; /* Zero margin to remove the top white space band entirely */
         }
       `}} />
     </div>

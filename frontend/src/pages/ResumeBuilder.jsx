@@ -294,7 +294,7 @@ const ResumeBuilder = () => {
           </div>
 
           {/* Section Content */}
-          <div className="flex-1 overflow-y-auto custom-scrollbar">
+          <div className="flex-1 min-w-0 overflow-y-auto overflow-x-hidden custom-scrollbar">
             {activeTab === 'content' && (
               <div className="p-4 flex flex-col gap-1">
                 {sidebarOpen && <h3 className="px-4 py-2 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Resume Sections</h3>}
@@ -318,10 +318,10 @@ const ResumeBuilder = () => {
             )}
 
             {activeTab === 'templates' && (
-              <div className="p-6">
+              <div className="p-4 min-w-0">
                 {sidebarOpen ? (
                   <>
-                    <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-6">Choose Template</h3>
+                    <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">Choose Template</h3>
                     <TemplateSelector 
                       selectedTemplateId={activeResume.templateId} 
                       onSelect={(val) => handleChange({ templateId: val })} 
@@ -372,7 +372,7 @@ const ResumeBuilder = () => {
         </div>
 
         {/* Middle - Editor (Always visible now, tabs only change sidebar) */}
-        <div className="flex-1 overflow-y-auto bg-gray-50/50 p-10 custom-scrollbar editor-panel">
+        <div className="w-[620px] flex-shrink-0 border-r overflow-y-auto bg-gray-50/50 p-10 custom-scrollbar editor-panel">
           <div className="max-w-3xl mx-auto">
             <div className="bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 border border-white p-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
               <div className="flex items-center gap-4 mb-10 pb-6 border-b border-gray-50">
@@ -440,7 +440,7 @@ const ResumeBuilder = () => {
         </div>
 
         {/* Right - Live Preview */}
-        <div className="w-[600px] border-l shadow-2xl z-10 flex flex-col bg-white">
+        <div className="flex-1 z-10 flex flex-col bg-white">
           <ResumePreview data={activeResume} />
         </div>
       </main>

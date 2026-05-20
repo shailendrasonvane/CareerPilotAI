@@ -41,7 +41,7 @@ const ResumePrintView = () => {
 
   return (
     <div className="bg-white min-h-screen no-print-bg">
-      <div className="mx-auto w-[210mm] min-h-[297mm] shadow-none print:shadow-none resume-container">
+      <div className="mx-auto w-[210mm] shadow-none print:shadow-none resume-container">
         <TemplateComponent data={resume} styles={styles} />
       </div>
       
@@ -56,6 +56,43 @@ const ResumePrintView = () => {
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
         }
+
+        .resume-container {
+          padding: 0 !important;
+          margin: 0 auto !important;
+        }
+
+        .resume-template-root {
+          min-height: auto !important;
+          height: auto !important;
+          box-shadow: none !important;
+        }
+
+        /* Prevent sections and headings from being split awkwardly across pages */
+        h1, h2, h3, h4, header {
+          break-after: avoid;
+          page-break-after: avoid;
+        }
+
+        section, .resume-section {
+          break-inside: auto !important;
+          page-break-inside: auto !important;
+          margin-bottom: ${styles.sectionSpacing}px;
+        }
+
+        /* Prevent individual content blocks from splitting midway */
+        section > div > div, 
+        section li,
+        .resume-item {
+          break-inside: avoid !important;
+          page-break-inside: avoid !important;
+        }
+
+        /* Strip double shadows from templates to ensure crisp rendering */
+        .resume-container [class*="shadow-"] {
+          box-shadow: none !important;
+        }
+
         @media print {
           body * {
             visibility: hidden;
@@ -67,14 +104,18 @@ const ResumePrintView = () => {
             position: absolute;
             left: 0;
             top: 0;
-            margin: 0;
-            padding: 0;
+            margin: 0 !important;
+            padding: 0 !important;
             width: 210mm !important;
-            min-height: 297mm !important;
+            min-height: auto !important;
+            height: auto !important;
+            box-shadow: none !important;
+            border: none !important;
           }
-          .resume-section {
-            break-inside: avoid;
-            page-break-inside: avoid;
+
+          .resume-template-root {
+            min-height: auto !important;
+            height: auto !important;
           }
         }
       `}</style>

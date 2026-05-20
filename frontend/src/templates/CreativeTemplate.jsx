@@ -19,7 +19,7 @@ const CreativeTemplate = ({ data, styles }) => {
 
   return (
     <div 
-      className="bg-white w-full max-w-[210mm] min-h-[297mm] shadow-lg mx-auto flex overflow-hidden border-[8px]"
+      className="resume-template-root bg-white w-full max-w-[210mm] h-auto mx-auto flex overflow-hidden border-[8px] box-border"
       style={{ fontFamily, color: '#1f2937', borderColor: '#f3f4f6' }}
     >
       {/* Left Column - Dynamic Sidebar */}
@@ -58,23 +58,24 @@ const CreativeTemplate = ({ data, styles }) => {
           <p className="text-xs font-bold tracking-[0.2em] uppercase opacity-80">{data.personalDetails?.jobTitle}</p>
         </div>
 
-        <section className="relative z-10">
+        <section className="relative z-10 w-full min-w-0">
           <h2 className="text-[10px] font-black uppercase tracking-[0.4em] mb-6 opacity-60 border-b border-white/10 pb-2">Reach Me</h2>
-          <div className="flex flex-col gap-5 text-[11px] font-medium">
-            {data.personalDetails?.phone && <div className="flex items-center gap-3"><span className="opacity-60 text-lg">📱</span> {data.personalDetails.phone}</div>}
-            {data.personalDetails?.email && <div className="flex items-center gap-3"><span className="opacity-60 text-lg">✉</span> {data.personalDetails.email}</div>}
-            {data.personalDetails?.city && <div className="flex items-center gap-3"><span className="opacity-60 text-lg">📍</span> {data.personalDetails.city}</div>}
+          <div className="flex flex-col gap-5 text-[11px] font-medium w-full min-w-0">
+            {data.personalDetails?.phone && <div className="flex items-center gap-3 w-full min-w-0"><span className="opacity-60 text-lg flex-shrink-0">📱</span> <span className="truncate">{data.personalDetails.phone}</span></div>}
+            {data.personalDetails?.email && <div className="flex items-center gap-3 w-full min-w-0" title={data.personalDetails.email}><span className="opacity-60 text-lg flex-shrink-0">✉</span> <span className="break-all">{data.personalDetails.email}</span></div>}
+            {data.personalDetails?.city && <div className="flex items-center gap-3 w-full min-w-0"><span className="opacity-60 text-lg flex-shrink-0">📍</span> <span className="truncate">{data.personalDetails.city}</span></div>}
           </div>
         </section>
 
         {data.skills?.length > 0 && (
-          <section className="relative z-10">
+          <section className="relative z-10 w-full min-w-0">
             <h2 className="text-[10px] font-black uppercase tracking-[0.4em] mb-6 opacity-60 border-b border-white/10 pb-2">Expertise</h2>
             <div className="flex flex-col gap-5">
               {data.skills.map((skill, index) => (
-                <div key={index}>
-                  <div className="flex justify-between text-[10px] uppercase font-bold mb-2">
-                    <span>{skill.skillName}</span>
+                <div key={index} className="w-full min-w-0">
+                  <div className="flex justify-between items-center flex-wrap gap-1 text-[10px] uppercase font-bold mb-2 w-full min-w-0">
+                    <span className="truncate max-w-[70%]" title={skill.skillName}>{skill.skillName}</span>
+                    <span className="opacity-60 text-[8px] flex-shrink-0">{skill.skillLevel}</span>
                   </div>
                   <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
                     <div 
@@ -82,6 +83,22 @@ const CreativeTemplate = ({ data, styles }) => {
                       style={{ width: skill.skillLevel === 'Expert' ? '100%' : skill.skillLevel === 'Experienced' ? '75%' : '50%' }}
                     ></div>
                   </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {data.languages?.length > 0 && (
+          <section className="relative z-10 mt-10 animate-in fade-in slide-in-from-bottom duration-500 w-full min-w-0">
+            <h2 className="text-[10px] font-black uppercase tracking-[0.4em] mb-6 opacity-60 border-b border-white/10 pb-2">Languages</h2>
+            <div className="flex flex-col gap-4">
+              {data.languages.map((lang, index) => (
+                <div key={index} className="flex justify-between items-center flex-wrap gap-x-2 gap-y-1 text-xs font-bold w-full min-w-0">
+                  <span className="truncate max-w-[60%]" title={lang.languageName}>{lang.languageName}</span>
+                  <span className="text-[8px] uppercase px-2 py-0.5 rounded bg-white/10 text-white opacity-90 tracking-wider font-extrabold whitespace-nowrap flex-shrink-0">
+                    {lang.proficiencyLevel}
+                  </span>
                 </div>
               ))}
             </div>

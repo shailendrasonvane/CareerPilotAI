@@ -7,6 +7,7 @@ import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import ResumeDashboard from './pages/ResumeDashboard';
+import DashboardHome from './pages/DashboardHome';
 import ResumeBuilder from './pages/ResumeBuilder';
 import ResumePrintView from './pages/ResumePrintView';
 import ResumeExportView from './pages/ResumeExportView';
@@ -14,7 +15,6 @@ import VerifyEmailPage from './pages/VerifyEmailPage';
 import ProfilePage from './pages/ProfilePage';
 import ChangePasswordPage from './pages/ChangePasswordPage';
 import AdminRoute from './components/AdminRoute';
-import { Plus } from 'lucide-react';
 
 // Placeholder pages
 const HomePage = () => (
@@ -63,38 +63,6 @@ const HomePage = () => (
           ))}
         </div>
       </div>
-    </div>
-  </div>
-);
-
-const DashboardHome = () => (
-  <div className="space-y-10 animate-in fade-in duration-500">
-    <header>
-      <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Dashboard Overview</h1>
-      <p className="text-slate-500 dark:text-slate-400 mt-2 font-medium text-lg">Here's what's happening with your job search today.</p>
-    </header>
-
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-      {[
-        { label: 'Resumes Created', value: '4', trend: '+2 this week' },
-        { label: 'Applications Sent', value: '12', trend: '+5 this week' },
-        { label: 'Interview Invites', value: '2', trend: 'Keep it up!' },
-      ].map((stat, i) => (
-        <div key={i} className="glass-card p-8 group hover:shadow-indigo transition-all duration-500">
-          <p className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">{stat.label}</p>
-          <div className="flex items-baseline gap-4 mt-4">
-            <h3 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter">{stat.value}</h3>
-            <span className="text-xs font-black text-green-600 bg-green-50 dark:bg-green-900/20 dark:text-green-400 px-3 py-1 rounded-full border border-green-100 dark:border-green-800/50 uppercase tracking-widest">{stat.trend}</span>
-          </div>
-        </div>
-      ))}
-    </div>
-
-    <div className="glass-card h-80 flex flex-col items-center justify-center border-dashed border-2 border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/30">
-      <div className="w-16 h-16 bg-white dark:bg-slate-800 rounded-3xl flex items-center justify-center mb-4 shadow-sm border border-slate-100 dark:border-slate-700">
-        <Plus size={32} className="text-slate-400" />
-      </div>
-      <p className="text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest text-xs">Recent Activity Feed Coming Soon</p>
     </div>
   </div>
 );

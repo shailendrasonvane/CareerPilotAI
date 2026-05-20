@@ -19,7 +19,7 @@ const ATSFriendlyTemplate = ({ data, styles }) => {
 
   return (
     <div 
-      className="bg-white w-full max-w-[210mm] min-h-[297mm] shadow-lg mx-auto p-[1in]"
+      className="resume-template-root bg-white w-full max-w-[210mm] h-auto mx-auto p-[1in] box-border"
       style={{ fontFamily, color: '#000', lineHeight: '1.4' }}
     >
       {/* Header - ATS Compliant (No tables, no graphics) */}
@@ -101,6 +101,20 @@ const ATSFriendlyTemplate = ({ data, styles }) => {
               {data.skills.map((s, i) => (
                 <React.Fragment key={i}>
                   <span className="font-bold">{s.skillName}</span> ({s.skillLevel}){i < data.skills.length - 1 ? ', ' : ''}
+                </React.Fragment>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Languages */}
+        {data.languages?.length > 0 && (
+          <section className="mt-6">
+            <h2 className="text-[14pt] font-bold uppercase border-b border-gray-300 mb-3 pb-1 tracking-widest">Languages</h2>
+            <div className={`${bodyFontSize} leading-relaxed`}>
+              {data.languages.map((lang, i) => (
+                <React.Fragment key={i}>
+                  <span className="font-bold">{lang.languageName}</span> ({lang.proficiencyLevel}){i < data.languages.length - 1 ? ', ' : ''}
                 </React.Fragment>
               ))}
             </div>

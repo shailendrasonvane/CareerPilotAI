@@ -15,6 +15,7 @@ public static class DependencyInjection
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IResumeService, ResumeService>();
         services.AddScoped<IResumeTemplateService, ResumeTemplateService>();
+        services.AddScoped<IDashboardService, DashboardService>();
         // services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         
         return services;

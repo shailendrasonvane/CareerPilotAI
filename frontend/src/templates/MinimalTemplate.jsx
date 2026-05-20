@@ -19,7 +19,7 @@ const MinimalTemplate = ({ data, styles }) => {
 
   return (
     <div 
-      className="bg-white w-full max-w-[210mm] min-h-[297mm] shadow-lg mx-auto p-16"
+      className="resume-template-root bg-white w-full max-w-[210mm] h-auto mx-auto p-16 box-border"
       style={{ fontFamily, color: '#374151' }}
     >
       {/* Header - Minimalist & Airy */}
@@ -93,11 +93,28 @@ const MinimalTemplate = ({ data, styles }) => {
             <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-600 mb-6 mt-10">
               Expertise
             </h2>
-            <div className="flex flex-wrap gap-x-10 gap-y-4">
+            <div className="flex flex-wrap gap-x-10 gap-y-4 w-full min-w-0">
               {data.skills.map((skill, index) => (
-                <div key={index} className="group">
-                  <span className={`${bodyFontSize} font-medium text-gray-600`}>{skill.skillName}</span>
+                <div key={index} className="group min-w-0 max-w-full">
+                  <span className={`${bodyFontSize} font-medium text-gray-600 truncate block`} title={skill.skillName}>{skill.skillName}</span>
                   <div className="h-0.5 w-0 group-hover:w-full bg-blue-600 transition-all duration-300"></div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Languages */}
+        {data.languages?.length > 0 && (
+          <section>
+            <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-600 mb-6 mt-10">
+              Languages
+            </h2>
+            <div className="flex flex-wrap gap-x-8 gap-y-3 w-full min-w-0">
+              {data.languages.map((lang, index) => (
+                <div key={index} className="group flex items-center gap-1.5 min-w-0">
+                  <span className={`${bodyFontSize} font-semibold text-gray-700 truncate`} title={lang.languageName}>{lang.languageName}</span>
+                  <span className="text-[9px] text-gray-400 font-bold uppercase tracking-wider whitespace-nowrap flex-shrink-0">({lang.proficiencyLevel})</span>
                 </div>
               ))}
             </div>
